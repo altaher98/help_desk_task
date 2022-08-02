@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--form view -->
+        <record id="hd_ticket_form_id" model="ir.ui.view">
+            <field name="name">Help Desk Ticket</field>
+            <field name="model">hd.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Ticket">
+                    <header>
+                        <button name="action_progress" string="In Progress" class="oe_highlight" states="new" type="object"/>
+                        <button name="action_solved" string="Solved" class="oe_highlight" states="progress" type="object"/>
+                        <button name="action_cancel" string="Cancelled" class="oe_highlight" states="solved" type="object"/>
+                        <button name="action_cancel" string="Cancelled" class="oe_highlight" states="progress" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="team" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="assigned" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="priority" widget="priority" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="tags" widget="many2many_tags" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                            </group>
+                            <group>
+                                <field name="customer_name" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="customer_email" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="customer_phone" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="hosting_type" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="server_url" attrs="{'invisible':[('hosting_type','=','on_premise')],'readonly':[('state','in',['solved','cancel'])]}"/>
+                                <field name="resolution_time" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description" attrs="{'readonly':[('state','in',['solved','cancel'])]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+        <!--        tree view -->
+        <record id="hd_ticket_tree_id" model="ir.ui.view">
+            <field name="name">Ticket</field>
+            <field name="model">hd.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Help Desk Ticket">
+                    <field name="name"/>
+                    <field name="team"/>
+                    <field name="priority"/>
+                    <field name="tags"/>
+                    <field name="customer_name"/>
+                    <field name="customer_phone"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hd_ticket_id_menu_action" model="ir.actions.act_window">
+            <field name="name">Ticket</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hd.ticket</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
+        <menuitem id="hd_help_desk_root_id" name="Help Desk" sequence="4"/>
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="hd_ticket_id_menu" name="Ticket" groups="" parent="hd_help_desk_root_id"
+                  action="hd_ticket_id_menu_action" sequence="4"/>
+        <menuitem id="report_root_id" parent="hd_help_desk_root_id" groups="group_help_desk_users" name="Report" sequence="4"/>
+        <menuitem id="configuration_root_id" parent="hd_help_desk_root_id"  groups="" name="Configuration" sequence="7"/>
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="tags_id_menu" name="Tags" parent="configuration_root_id" groups="group_help_desk_manager" action="hd_tags_id_menu_action"
+                  sequence="5"/>
+        <menuitem id="teams_id_menu" name="Teams" parent="configuration_root_id" groups="group_help_desk_manager" action="teams_id_menu_action"
+                  sequence="3"/>
+    </data>
+</odoo>

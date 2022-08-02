@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hd_tags_form_id" model="ir.ui.view">
+            <field name="name">Help Desk Tags</field>
+            <field name="model">hd.tags</field>
+            <field name="arch" type="xml">
+                <form string="Help Desk Tags">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hd_tags_id_menu_action" model="ir.actions.act_window">
+            <field name="name">Help Desk Tags</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hd.tags</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>
+
